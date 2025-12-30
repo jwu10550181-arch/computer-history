@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>計算機歷史與發展</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        main {
+            padding: 2rem;
+            background-color: #fff;
+            min-height: 80vh;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .content {
+            display: none;
+        }
+        .content.active {
+            display: block;
+        }
+
+        .text-with-image {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        .text-with-image img {
+            width: 50%;
+            border-radius: 8px;
+        }
+
+        .toggle-title {
+            cursor: pointer;
+            background-color: #f0f0f0;
+            padding: 0.6rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
+        .toggle-content {
+            display: none;
+            padding-left: 1rem;
+        }
+        .toggle-content.active {
+            display: block;
+        }
+
+        .timeline {
+            border-left: 3px solid #333;
+            padding-left: 1rem;
+            margin-top: 1rem;
+        }
+        .timeline-item {
+            margin-bottom: 1rem;
+        }
+        .timeline-year {
+            font-weight: bold;
+        }
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .history-table th,
+        .history-table td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .history-table th {
+            background-color: #f0f0f0;
+        }
+
+
+        /* 計算機樣式 */
+        .calc-wrapper {
+            max-width: 360px;
+            margin-top: 1rem;
+        }
+
+        .calc-display {
+            width: 100%;
+            height: 60px;
+            font-size: 2rem;
+            text-align: right;
+            padding-right: 1rem;
+        }
+
+        .calc-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .calc-buttons button {
+            width: 80px;
+            height: 80px;
+            font-size: 1rem;
+            border-radius: 50%;
+            border: none;
+        }
+
+        .gray { background-color: #a5a5a5; }
+        .dark { background-color: #333; color: #fff; }
+        .orange { background-color: #ff9f0a; color: #fff; }
+
+    </style>
+
+    <script>
+        function showPage(pageId) {
+            document.querySelectorAll('.content').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        function toggleContent(id) {
+            document.getElementById(id).classList.toggle('active');
+        }
+
+        /* 計算機功能 */
+        function appendValue(value) {
+            document.getElementById('display').value += value;
+        }
+        function clearDisplay() {
+            document.getElementById('display').value = '';
+        }
+        function calculate() {
+            try {
+                document.getElementById('display').value =
+                    eval(document.getElementById('display').value);
+            } catch {
+                document.getElementById('display').value = '錯誤';
+            }
+        }
+        function insert(val){
+            document.getElementById('display').value += val;
+        }
+
+        function clearAll(){
+            document.getElementById('display').value = '';
+        }
+
+        function toggleSign(){
+            let d = document.getElementById('display');
+            d.value = d.value.startsWith('-') ? d.value.slice(1) : '-' + d.value;
+        }
+
+        function func(type){
+            let x = parseFloat(document.getElementById('display').value);
+            if(isNaN(x)) return;
+            let r;
+            switch(type){
+                case 'sin': r = Math.sin(x); break;
+                case 'cos': r = Math.cos(x); break;
+                case 'tan': r = Math.tan(x); break;
+                case 'log': r = Math.log10(x); break;
+                case 'ln':  r = Math.log(x); break;
+                case 'sqrt': r = Math.sqrt(x); break;
+        }
+
+        document.getElementById('display').value = r;
+        }
+
+        function deleteLast() {
+            let d = document.getElementById('display');
+            d.value = d.value.slice(0, -1);
+        }
+
+
+    </script>
+</head>
+
+<body>
+<header>
+    <h1>計算機歷史與發展</h1>
+    <nav>
+        <ul>
+            <li><a onclick="showPage('home')">首頁</a></li>
+            <li><a onclick="showPage('intro')">計算機簡介</a></li>
+            <li><a onclick="showPage('stages')">發展階段</a></li>
+            <li><a onclick="showPage('milestones')">重要里程碑</a></li>
+            <li><a onclick="showPage('impact')">現代應用與影響</a></li>
+            <li><a onclick="showPage('calculator')">互動計算機</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+
+<!-- 首頁 -->
+<div id="home" class="content active">
+    <h1>網站說明</h1>
+
+    <div class="text-with-image">
+        <div>
+            <p>
+                從「歷史 → 發展 → 里程碑」看計算機
+            </p>
+
+            <p>
+                最早的機械計算工具，到使用真空管的大型電腦、晶體管與積體電路的出現，
+                再到個人電腦、智慧型手機與現代的人工智慧，
+                計算機已經深深影響人類生活的每一個角落。
+            </p>
+
+            <p>透過本網站，你可以大致了解：</p>
+
+            <ul>
+                <li>計算機是什麼、由哪些部分組成</li>
+                <li>計算機技術發展的主要階段</li>
+                <li>幾個關鍵的歷史事件與技術突破</li>
+                <li>計算機在現代社會中的實際應用與影響</li>
+            </ul>
+        </div>
+
+        <img src="計算機照片1.jpg" style="width: 50%;">
+    </div>
+</div>
+
+
+<!-- 計算機簡介 -->
+<div id="intro" class="content">
+    <h1>計算機簡介</h1>
+    <p>
+        一般所說的「計算機」（Computer），是能夠根據指令，進行資料處理的電子系統。 典型的計算機由以下幾個主要部分組成：
+    </p>
+
+    <h2 class="toggle-title" onclick="toggleContent('intro1')">
+        一、主要組成（點擊展開）
+    </h2>
+    <div id="intro1" class="toggle-content">
+        <li><b>硬體（Hardware）</b>：看得到、摸得到的實體裝置，例如：
+            <br>　CPU（中央處理器）、主記憶體、硬碟／SSD、螢幕、鍵盤、滑鼠…</li>
+        <li><b>軟體（Software）</b>：在硬體上執行的程式與指令：
+            <br>　作業系統（Windows、macOS、Linux）、App、遊戲、瀏覽器等。</li>
+        <li><b>資料（Data）</b>：計算機處理的內容：
+            <br>　文字、數字、圖片、聲音、影片、感測器資料…都可以轉成二進位。</li>
+        <li><b>使用者（User）</b>：真正「下指令」的人，決定電腦被拿來做什麼。</li>
+    </div>
+
+    <h2 class="toggle-title" onclick="toggleContent('intro2')">
+        二、馮・紐曼架構（點擊展開）
+    </h2>
+    <div id="intro2" class="toggle-content">
+        <p>
+            多數現代計算機都採用「馮・紐曼架構」，重點概念是：
+        </p>
+        <ul>
+            <li>程式和資料都用<b>二進位</b>存放在同一組記憶體中。</li>
+            <li>CPU 按照「取指令 → 解碼 → 執行 → 存回」的循環來工作。</li>
+            <li>只要改寫程式，不用改硬體，就能讓同一台電腦做不同工作。</li>
+        </ul>
+        <p>
+            這個設計大約在 1940 年代提出，直到今天仍然是一般電腦架構的基礎，
+            也是後面各種發展階段的共同背景。
+    </div>
+</div>
+
+<!-- 發展階段 -->
+<div id="stages" class="content">
+    <h1>計算機發展階段</h1>
+    <p>計算機技術的發展，可以從「主要元件」和「典型特徵」來區分幾個階段。</p>
+
+    <h3 class="toggle-title" onclick="toggleContent('stage1')">1.機械計算時代</h3>
+    <div id="stage1" class="toggle-content">
+        電子電腦出現前，人類已經用<b>算盤、滑尺</b>等工具輔助計算。
+        17 世紀開始出現用齒輪運轉的機械計算機，只能做固定的運算，
+        但已經是「用機器幫忙算」的起點。
+    </div>
+
+    <h3 class="toggle-title" onclick="toggleContent('stage2')">2.第一代：真空管電腦</h3>
+    <div id="stage2" class="toggle-content">
+        二戰期間為了軍事與科學用途，出現了使用<b>真空管</b>的電子計算機，
+        例如 1946 年完成的 ENIAC。
+        <br>這些電腦：
+        <ul>
+            <li>體積像一整間教室那麼大。</li>
+            <li>耗電量高、發熱嚴重、需要專人維護。</li>
+            <li>程式修改非常麻煩，往往要重新接線。</li>
+        </ul>
+    </div>
+
+    <h3 class="toggle-title" onclick="toggleContent('stage3')">3.第二代：晶體管電腦</h3>
+    <div id="stage3" class="toggle-content">
+        1947 年發明的<b>晶體管</b>取代真空管之後，電腦變得更小、更穩定、
+        更省電，也比較不容易壞。這一代電腦開始被政府、企業、學校用來做
+        商業資料處理與科學研究。
+    </div>
+
+    <h3 class="toggle-title" onclick="toggleContent('stage4')">4.第三代：積體電路電腦</h3>
+    <div id="stage4" class="toggle-content">
+        1958 年之後，<b>積體電路（IC）</b>開始應用在電腦上，
+        把許多元件塞進同一塊晶片裡，成本降低、速度提升。
+        這個時期也出現了作業系統、多工與「小型電腦」，更多組織能負擔電腦設備。
+    </div>
+
+    <h3 class="toggle-title" onclick="toggleContent('stage5')">5.第四代：微處理器與個人電腦</h3>
+    <div id="stage5" class="toggle-content">
+        1971 年的 Intel 4004 是第一顆商用<b>微處理器</b>，
+        讓 CPU 能完全放進一小片晶片。
+        接著 Altair 8800、Apple II、IBM PC 等產品陸續推出，
+        開啟了<b>個人電腦（PC）</b>時代，一般人家裡也可能有電腦。
+    </div>
+    
+    <h3 class="toggle-title" onclick="toggleContent('stage6')">6. 網際網路、行動裝置與 AI 時代</h3>
+    <div id="stage6" class="toggle-content">
+        1989 年提出的<b>全球資訊網（WWW）</b>與 1990 年代網際網路的普及，
+        讓電腦不再是孤立的機器，而是可以連上全球。
+        2000 年以後，智慧型手機、平板與雲端運算興起，
+        最近十幾年又因為深度學習與生成式 AI，
+        讓計算機的應用從生活、工作延伸到各種智慧服務。
+    </div>
+    <br><br>
+    <h3>計算機歷史發展總表</h3>
+
+    <table class="history-table">
+        <tr>
+            <th>時期</th>
+            <th>主要科技</th>
+            <th>簡單特徵</th>
+            <th>代表例子</th>
+        </tr>
+        <tr>
+            <td>機械計算時代<br>(17～19 世紀)</td>
+            <td>齒輪、機械結構</td>
+            <td>只能做基本加減乘除；沒有電子元件。</td>
+            <td>算盤、滑尺、帕斯卡計算機</td>
+        </tr>
+        <tr>
+            <td>第一代電腦<br>(約 1940～50)</td>
+            <td>真空管</td>
+            <td>體積巨大、耗電高、故障率高；使用機器語言與穿孔卡。</td>
+            <td>ENIAC</td>
+        </tr>
+        <tr>
+            <td>第二代電腦<br>(約 1950～60)</td>
+            <td>晶體管</td>
+            <td>比真空管更小、更省電、更可靠；開始出現組合語言。</td>
+            <td>IBM 1401 等</td>
+        </tr>
+        <tr>
+            <td>第三代電腦<br>(約 1960～70)</td>
+            <td>積體電路（IC）</td>
+            <td>可以在一片晶片上放很多元件；有作業系統與多工環境。</td>
+            <td>PDP 系列小型電腦</td>
+        </tr>
+        <tr>
+            <td>第四代電腦<br>(1970 之後)</td>
+            <td>微處理器、大規模 IC</td>
+            <td>個人電腦普及，價格大幅下降；開始進入 PC 時代。</td>
+            <td>Altair 8800、IBM PC、Apple II</td>
+        </tr>
+        <tr>
+            <td>網路與行動裝置時代<br>(1990 之後)</td>
+            <td>網際網路、智慧型手機、雲端運算</td>
+            <td>電腦連成全球網路，隨身裝置普及，進入資訊爆炸與 AI 時代。</td>
+            <td>WWW、智慧型手機、雲端服務</td>
+        </tr>
+    </table>
+</div>
+
+<!-- 重要里程碑 -->
+<div id="milestones" class="content">
+    <h1>重要里程碑</h1>
+    <p>
+        計算機已經從「專家使用的工具」變成日常生活的必需品，在各個領域都有重要影響：
+    </p>
+
+    <div class="timeline">
+        <div class="timeline-item">
+            <span class="timeline-year">17～19 世紀：</span>
+                機械計算工具發展，例如算盤、滑尺、帕斯卡與萊布尼茲的機械計算機，
+                為後來的自動計算思想奠定基礎。
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">1946 年：</span>
+                ENIAC 完成，是最早的大型通用電子計算機之一，象徵第一代真空管電腦的代表。
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">1947 年：</span>
+                晶體管問世，之後取代真空管，讓電腦體積與耗電大幅下降。
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">1958 年：</span>
+                積體電路（IC）出現，能在單一晶片中整合多個元件，推動第三代電腦成形。
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">1971 年：</span>
+                Intel 4004 微處理器上市，標示 CPU 可以整合在一顆晶片上，第四代電腦展開。
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">1975 年：</span>
+                Altair 8800 被視為個人電腦潮流的開端，吸引許多電腦愛好者與工程師投入。
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">1981 年：</span>
+                IBM PC 推出，建立 PC 架構的標準，鼓勵軟體與硬體生態系蓬勃發展。
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">1984 年：</span>
+                Apple Macintosh 上市，以圖形化使用者介面（GUI）讓一般使用者更容易操作。
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">1989 年：</span>
+                全球資訊網（World Wide Web）構想提出，後來成為今天的網頁與瀏覽器世界基礎。
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">2007 年：</span>
+                第一代 iPhone 發表，把手機、網路、多媒體整合在一台智慧型裝置中，
+                大幅改變人們使用計算機的方式。
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">2010 年代：</span>
+                雲端運算與大數據快速發展，許多服務改成在雲端資料中心運作，
+                使用者只要透過網路連線即可使用。
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">2016 年：</span>
+                AlphaGo 擊敗圍棋世界冠軍，象徵深度學習與強化學習在實際應用上的重要突破。
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">2020 年代：</span>
+                生成式人工智慧與大型語言模型興起，成為新一波計算機應用與研究的焦點。
+            </div>
+        </div>
+    </div>
+
+<!-- 現代應用與影響 -->
+<div id="impact" class="content">
+    <h1>現代應用與影響</h1>
+    <p>
+        走到今天，計算機已經不是「少數專家」才在用的東西，而是融入生活中的基本工具。
+        下面是幾個主要面向：
+    </p>
+    <ul>
+        <li><b>日常生活：</b>通訊軟體、社群媒體、線上購物、地圖導航、串流影音等。</li>
+        <li><b>商業與金融：</b>企業資訊系統、ERP、線上銀行、行動支付、演算法交易。</li>
+        <li><b>科學研究：</b>氣象預報、天文模擬、基因定序、藥物設計等，都仰賴高效能運算。</li>
+        <li><b>政府與公共服務：</b>戶政、健保、稅務、交通管制、災防系統等資訊化。</li>
+        <li><b>教育與學習：</b>線上課程、數位教材、模擬實驗、學習平台讓學習更彈性。</li>
+    </ul>
+    <p>
+        同時，計算機也帶來新的挑戰，例如<b>資安問題、個人隱私、假訊息、數位落差</b>等。
+        如何在享受科技便利的同時，負責任地面對這些議題，是現代社會必須思考的方向。
+    </p>
+
+
+</div>
+
+<!-- 計算機 -->
+<div id="calculator" class="content">
+    <h1>互動式計算機</h1>
+    <p>
+        此計算機示範現代電腦即時處理使用者輸入，
+        呼應計算機從歷史走向實際應用。
+    </p>
+
+    <div class="calc-wrapper">
+        <input id="display" class="calc-display" disabled>
+        
+        <div class="calc-buttons">
+        <!-- 第一排 -->
+        <button class="gray" onclick="deleteLast()">DEL</button> 
+        <button class="gray" onclick="clearAll()">AC</button>
+        <button class="gray" onclick="func('sqrt')">√</button>
+        <button class="orange" onclick="insert('/')">÷</button>
+        
+        <!-- 第二排 -->
+        <button class="dark" onclick="insert('7')">7</button>
+        <button class="dark" onclick="insert('8')">8</button>
+        <button class="dark" onclick="insert('9')">9</button>
+        <button class="orange" onclick="insert('*')">×</button>
+        
+        <!-- 第三排 -->
+        <button class="dark" onclick="insert('4')">4</button>
+        <button class="dark" onclick="insert('5')">5</button>
+        <button class="dark" onclick="insert('6')">6</button>
+        <button class="orange" onclick="insert('-')">−</button>
+        
+        <!-- 第四排 -->
+        <button class="dark" onclick="insert('1')">1</button>
+        <button class="dark" onclick="insert('2')">2</button>
+        <button class="dark" onclick="insert('3')">3</button>
+        <button class="orange" onclick="insert('+')">+</button>
+        
+        <!-- 第五排 -->
+        <button class="dark" onclick="toggleSign()">+/-</button> 
+        <button class="dark" onclick="insert('0')">0</button>
+        <button class="dark" onclick="insert('.')">.</button>
+        <button class="orange" onclick="calculate()">=</button>
+        
+        <!-- 工程功能 -->
+        <button class="gray" onclick="func('sin')">sin</button>
+        <button class="gray" onclick="func('cos')">cos</button>
+        <button class="gray" onclick="func('tan')">tan</button>
+        <button class="gray" onclick="insert('π')">π</button>
+        
+        <button class="gray" onclick="func('log')">log</button>
+        <button class="gray" onclick="func('ln')">ln</button>
+        <button class="gray" onclick="insert('e')">e</button>
+        </div>
+    </div>
+</div>   
+
+</main>
+
+<footer>
+    計算機概論期末專案 ｜ 製作人：余睿芸、吳倢瑩、王彥蘅
+</footer>
+
+</body>
+</html>
